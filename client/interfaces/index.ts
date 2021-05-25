@@ -3,6 +3,7 @@ export type Patient = {
   name: string;
   age: number;
   animal: string;
+  description: string;
   completed: boolean;
   date: Date;
 };

@@ -1,18 +1,36 @@
-import { InferGetStaticPropsType } from "next";
-import Layout from "../containers/layout";
+import { InferGetServerSidePropsType } from "next";
+import Layout from "../containers/Layout";
 import { Patient } from "../interfaces";
 import { api } from "../utils/api";
-import StdButton from "../components/stdButton";
+import Header from "../components/Header";
+import Table from "../containers/TableContainer";
+import React, { useState } from "react";
+import AddPatient from "../components/AddPatient";
 
-const Index = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Index = ({
+  data: patientsData,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const [data, setData] = useState(patientsData);
   return (
     <Layout>
-      <StdButton />
+      <Header />
+      <AddPatient setData={setData} />
+      <Table
+        setData={setData}
+        tbodyData={data}
+        theadData={["name", "age", "animal", "healed"]}
+      />
+      <div className="dog">
+        <img src="/svg/dog.svg" alt="dog" />
+      </div>
+      <div className="cat">
+        <img src="/svg/cat.svg" alt="cat" />
+      </div>
     </Layout>
   );
 };
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
   const res = await api.get("/registry");
   const data: Patient[] = res.data;
 
